@@ -4,41 +4,61 @@ namespace GreglistSharp.Controllers;
 [Route("api/[controller]")]
 public class CarsController : ControllerBase
 {
-  private readonly CarsService _carsService;
+    private readonly CarsService _carsService;
 
-  public CarsController(CarsService carsService)
-  {
-    _carsService = carsService;
-  }
+    private readonly Auth0Provider _auth0Provider;
 
-
-  [HttpGet]
-  public ActionResult<List<Car>> Get()
-  {
-    try
+    public CarsController(CarsService carsService, Auth0Provider auth0Provider)
     {
-      List<Car> cars = _carsService.GetCars();
-      return Ok(cars);
+        _carsService = carsService;
+        _auth0Provider = auth0Provider;
     }
-    catch (Exception e)
+
+    [HttpGet]
+    public ActionResult<List<Car>> Get()
     {
-      return BadRequest(e.Message);
+        try
+        {
+            List<Car> cars = _carsService.GetCars();
+            return Ok(cars);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-  }
+
+    [HttpGet("{id}")]
+
+    public ActionResult<Car> GetById(int id)
+    {
+        try
+        {
+            Car car = _carsService.GetById(id);
+            return Ok(car);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 
 
-  [HttpPost]
-  public ActionResult<Car> Create([FromBody] Car carData)
-  {
-    try
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult<Car>> Create([FromBody] Car carData)
     {
-      Car car = _carsService.CreateCar(carData);
-      return Ok(car);
+        try
+        {
+            Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+            carData.CreatorId = userInfo.Id;
+            Car car = _carsService.CreateCar(carData);
+            return Ok(car);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-    catch (Exception e)
-    {
-      return BadRequest(e.Message);
-    }
-  }
 
 }

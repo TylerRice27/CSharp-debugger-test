@@ -18,9 +18,9 @@ CREATE TABLE
         make VARCHAR(255) NOT NULL,
         model VARCHAR(255) NOT NULL,
         year INT NOT NULL,
-        price DECIMAL NOT NULL,
+        price DOUBLE NOT NULL,
         description VARCHAR(255),
         imgUrl VARCHAR(255),
         creatorId VARCHAR(255) NOT NULL,
-        Foreign Key (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
+        Foreign Key (creatorId) REFERENCES accounts(id)
     ) default charset utf8 COMMENT '';

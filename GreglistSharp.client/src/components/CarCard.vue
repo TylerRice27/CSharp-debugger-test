@@ -25,11 +25,11 @@ import { computed } from "vue";
 import Pop from "../utils/Pop.js";
 import { logger } from "../utils/Logger.js";
 import { carsService } from "../services/CarsService.js";
-import { useRoute } from "vue-router";
+import {  useRouter } from "vue-router";
 export default {
   props: { car: { type: Object, required: true } },
   setup(props) {
-    const router = useRoute();
+    const router = useRouter();
     return {
       account: computed(() => AppState.account),
       async removeCar() {
