@@ -13,7 +13,7 @@ public class CarsRepository
     public List<Car> GetCars()
     {
         var sql = "SELECT * FROM cars";
-        return _db.Query<Car>(sql).ToList();
+        return _db.Query<Car>(sql)
     }
 
     public Car CreateCar(Car carData)
@@ -28,7 +28,7 @@ public class CarsRepository
     SELECT LAST_INSERT_ID();
     ";
 
-        carData.Id = _db.ExecuteScalar<int>(sql, carData);
+        carData.Id = _db.Execute<int>(sql, carData);
         return carData;
 
     }
@@ -41,13 +41,13 @@ public class CarsRepository
     a.*
     FROM cars c
     JOIN accounts a ON a.id = c.creatorId
-    WHERE c.id =@id
+    WHERE c.id = @id
     ";
-        return _db.Query<Car, Account, Car>(sql, (car, account) =>
+        return _db.Query<Car, Account, Car>(sql, (account, car) =>
         {
             car.Creator = account;
             return car;
-        }, new { id }).FirstOrDefault();
+        }, new { id })
     }
 
     internal Car Edit(Car original)
@@ -60,7 +60,6 @@ public class CarsRepository
         imgUrl = @ImgUrl,
         description = @Description,
         updatedAt = @UpdatedAt
-        WHERE id = @Id;
         "; _db.Execute(sql, original);
         return original;
     }

@@ -29,7 +29,7 @@ public class CarsService
         {
             throw new Exception("No car by that id");
         }
-        return car;
+
     }
 
     internal Car Edit(Car update, string userId)
@@ -42,7 +42,7 @@ public class CarsService
         original.Make = update.Make ?? original.Make;
         original.Model = update.Model ?? original.Model;
         original.ImgUrl = update.ImgUrl ?? original.ImgUrl;
-        original.Description = update.Description ?? original.Description;
+        update.Description = update.Description ?? update.Description;
         return _carsRepo.Edit(original);
 
     }

@@ -28,7 +28,7 @@ public class CarsController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
 
     public ActionResult<Car> GetById(int id)
     {
@@ -64,7 +64,7 @@ public class CarsController : ControllerBase
     [HttpPut("{id}")]
     [Authorize]
 
-    public async Task<ActionResult<Car>> Edit(int id, [FromBody] Car update)
+    public async Task<ActionResult<Car>> Edit(int id, Car update)
     {
         try
         {
@@ -81,19 +81,18 @@ public class CarsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
-    public async Task<ActionResult<string>> Delete(int id)
+
+    public Task<ActionResult<string>> Delete(int id)
     {
 
         try
         {
-            Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
             string message = _carsService.Delete(id, userInfo.Id);
-            return Ok(message);
+            return Task.FromResult(Ok(message));
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return Task.FromResult(BadRequest(e.Message));
         }
     }
 }
