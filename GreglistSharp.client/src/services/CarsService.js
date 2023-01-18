@@ -26,7 +26,7 @@ class CarsService {
 
     async editCar(carData) {
         logger.log(carData)
-        const res = await api.put('api/cars/' + id, carData)
+        const res = await api.put('api/cars/' + carData.id, carData)
         logger.log('[editCar]', res.data)
     }
 

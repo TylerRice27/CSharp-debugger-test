@@ -35,6 +35,7 @@ export default {
       async removeCar() {
         try {
           await carsService.removeCar(props.car.id);
+          Pop.toast(`You deleted ${props.car.make} ${props.car.model}`, 'info')
         } catch (error) {
           Pop.error(error);
           logger.error(error);

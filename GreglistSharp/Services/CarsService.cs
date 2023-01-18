@@ -31,4 +31,30 @@ public class CarsService
         }
         return car;
     }
+
+    internal Car Edit(Car update, string userId)
+    {
+        Car original = GetById(update.Id);
+        if (original.CreatorId != userId)
+        {
+            throw new Exception("You are not the owner of this car");
+        }
+        original.Make = update.Make ?? original.Make;
+        original.Model = update.Model ?? original.Model;
+        original.ImgUrl = update.ImgUrl ?? original.ImgUrl;
+        original.Description = update.Description ?? original.Description;
+        return _carsRepo.Edit(original);
+
+    }
+
+    internal string Delete(int id, string userId)
+    {
+        Car original = GetById(id);
+        if (original.CreatorId != userId)
+        {
+            throw new Exception("You are not the owner of this car");
+        }
+        _carsRepo.Delete(id);
+        return $"You deleted {original.Make} {original.Model}";
+    }
 }

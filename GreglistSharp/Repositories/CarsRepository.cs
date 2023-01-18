@@ -49,4 +49,25 @@ public class CarsRepository
             return car;
         }, new { id }).FirstOrDefault();
     }
+
+    internal Car Edit(Car original)
+    {
+        string sql = @"
+        UPDATE cars
+        SET
+        make = @Make,
+        model = @Model,
+        imgUrl = @ImgUrl,
+        description = @Description,
+        updatedAt = @UpdatedAt
+        WHERE id = @Id;
+        "; _db.Execute(sql, original);
+        return original;
+    }
+
+    internal void Delete(int id)
+    {
+        string sql = "DELETE FROM cars WHERE id = @id LIMIT 1";
+        _db.Execute(sql, new { id });
+    }
 }
